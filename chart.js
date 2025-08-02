@@ -1,25 +1,44 @@
 
-window.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('chart');
-  if (!container) return console.error("❌ Elemento #chart não encontrado");
-
-  const chart = LightweightCharts.createChart(container, {
-    width: container.clientWidth,
-    height: container.clientHeight,
-    layout: {
-      background: { color: '#1e1e1e' },
-      textColor: '#DDD'
-    },
-    grid: {
-      vertLines: { color: '#333' },
-      horzLines: { color: '#333' }
-    }
+window.addEventListener('DOMContentLoaded', async () => {
+  const chartContainer = document.getElementById('chart');
+  const chart = LightweightCharts.createChart(chartContainer, {
+    layout: { background: { color: '#1e1e1e' }, textColor: '#DDD' },
+    grid: { vertLines: { color: '#333' }, horzLines: { color: '#333' } },
+    width: chartContainer.clientWidth,
+    height: chartContainer.clientHeight
   });
 
   const candleSeries = chart.addCandlestickSeries();
-  candleSeries.setData([
-    { time: 1690000000, open: 29000, high: 29300, low: 28800, close: 29100 },
-    { time: 1690000600, open: 29100, high: 29400, low: 29050, close: 29300 },
-    { time: 1690001200, open: 29300, high: 29500, low: 29200, close: 29400 }
-  ]);
+
+  try {
+    const csvResp = await fetch('binance_btcusdt_normalized.csv');
+    const csvText = await csvResp.text();
+    const lines = csvText.trim().split('\n').slice(1);
+    const candles = lines.map(line => {
+      const [timestamp, open, high, low, close] = line.split(',');
+      return {
+        time: Math.floor(new Date(timestamp).getTime() / 1000),
+        open: parseFloat(open),
+        high: parseFloat(high),
+        low: parseFloat(low),
+        close: parseFloat(close)
+      };
+    });
+    candleSeries.setData(candles);
+
+    const res = await fetch('indicadores.json');
+    const indicadores = await res.json();
+
+    for (const [nome, dados] of Object.entries(indicadores)) {
+      const color = nome.includes('EMA') ? 'orange' :
+                    nome.includes('SMA') ? 'cyan' :
+                    nome.includes('RSI') ? 'yellow' : 'white';
+
+      const lineSeries = chart.addLineSeries({ color, lineWidth: 2, title: nome });
+      lineSeries.setData(dados);
+    }
+
+  } catch (err) {
+    console.error("❌ Erro ao carregar dados:", err);
+  }
 });
