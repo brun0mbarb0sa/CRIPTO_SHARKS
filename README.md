@@ -1,11 +1,38 @@
-# CRIPTO SHARKS
+# 🦈 CRIPTO SHARKS
 
-Visualizador de volume e zonas de suporte/resistência para BTC/USDT usando dados da Binance + Lightweight Charts.
+Visualizador de indicadores técnicos com dados reais do BTC via Binance.
 
-## 🔥 Como usar
+## 🔎 O que este projeto faz
 
-1. Clone este repositório
-2. Ative GitHub Pages nas configurações
-3. Acesse via: https://brun0mbarb0sa.github.io/CRIPTO_SHARKS/
+- Coleta candles da Binance (1m)
+- Calcula indicadores (SMA, EMA, RSI)
+- Exporta para CSV e JSON
+- Exibe os dados com `LightweightCharts` via GitHub Pages
 
-Feito com 💙 por brun0mbarb0sa
+## 🌐 Acesse o gráfico online
+
+Quando publicado via GitHub Pages:
+
+```
+https://seu_usuario.github.io/CRIPTO_SHARKS/
+```
+
+## 🚀 Como publicar no GitHub Pages
+
+1. Faça push da pasta `/web` com:
+   ```bash
+   git add web/
+   git commit -m "Add frontend"
+   git push origin main
+   ```
+
+2. Vá em Settings → Pages → Configure para `/web`
+
+## 📦 Requisitos Python
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+> Os indicadores são exportados para `web/indicadores.json` e `data/processed/*.csv`.
