@@ -1,0 +1,19 @@
+{
+  "indicadores": [
+    {
+      "nome": "sma",
+      "periodo": 20,
+      "fonte": "close"
+    },
+    {
+      "nome": "ema",
+      "periodo": 50,
+      "fonte": "close"
+    },
+    {
+      "nome": "rsi",
+      "periodo": 14,
+      "fonte": "close"
+    }
+  ]
+}
